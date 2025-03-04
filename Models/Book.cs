@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityFramework.Models;
 
@@ -14,4 +15,13 @@ public class Book
     public string? ISBN { get; set; }
 
     public decimal? Price { get; set; }
+
+    public BookDetail? BookDetail { get; set; }
+
+    [ForeignKey("Publisher")]
+    public int PublisherId { get; set; }
+
+    public Publisher? Publisher { get; set; }
+
+    public List<Author> Authors { get; set; }
 }
