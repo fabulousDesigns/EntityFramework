@@ -3,6 +3,7 @@ using EntityFramework.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304094204_SeedBookData")]
+    partial class SeedBookData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,26 +65,24 @@ namespace EntityFramework.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EntityFramework.Models.Category", b =>
+            modelBuilder.Entity("EntityFramework.Models.Genre", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("GenreId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Name");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenreId"));
 
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryId");
+                    b.Property<string>("GenreName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.ToTable("Category");
+                    b.HasKey("GenreId");
+
+                    b.ToTable("Genres");
                 });
 #pragma warning restore 612, 618
         }

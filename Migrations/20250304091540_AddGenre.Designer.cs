@@ -3,6 +3,7 @@ using EntityFramework.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304091540_AddGenre")]
+    partial class AddGenre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,44 +47,26 @@ namespace EntityFramework.Migrations
                     b.HasKey("BookId");
 
                     b.ToTable("Books");
-
-                    b.HasData(
-                        new
-                        {
-                            BookId = 1,
-                            ISBN = "123GTRED",
-                            Price = 10.99m,
-                            Title = "Spider without duty"
-                        },
-                        new
-                        {
-                            BookId = 2,
-                            ISBN = "12367GPRED",
-                            Price = 17.99m,
-                            Title = "Fortune of Time"
-                        });
                 });
 
-            modelBuilder.Entity("EntityFramework.Models.Category", b =>
+            modelBuilder.Entity("EntityFramework.Models.Genre", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("GenreId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenreId"));
 
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Name");
-
-                    b.Property<int>("DisplayOrder")
+                    b.Property<int>("Display")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryId");
+                    b.Property<string>("GenreName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.ToTable("Category");
+                    b.HasKey("GenreId");
+
+                    b.ToTable("Genres");
                 });
 #pragma warning restore 612, 618
         }
