@@ -9,8 +9,10 @@ public class Publisher
 
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [MaxLength(50)]
-    public string Location { get; set; }
+    public string? Location { get; set; }
+
+    public List<Book> Books { get; set; }
 }

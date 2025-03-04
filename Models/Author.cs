@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityFramework.Models;
 
@@ -19,6 +20,8 @@ public class Author
     [MaxLength(50)]
     public string? Location { get; set; }
 
+    [NotMapped]
     public string FullName => $"{FirstName} {LastName}";
 
+    public List<Book> Books { get; set; }
 }

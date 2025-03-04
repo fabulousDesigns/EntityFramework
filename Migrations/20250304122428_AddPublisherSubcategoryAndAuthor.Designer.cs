@@ -4,6 +4,7 @@ using EntityFramework.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304122428_AddPublisherSubcategoryAndAuthor")]
+    partial class AddPublisherSubcategoryAndAuthor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace EntityFramework.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("AuthorBook", b =>
-                {
-                    b.Property<int>("AuthorsAuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BooksBookId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuthorsAuthorId", "BooksBookId");
-
-                    b.HasIndex("BooksBookId");
-
-                    b.ToTable("AuthorBook");
-                });
 
             modelBuilder.Entity("EntityFramework.Models.Author", b =>
                 {
@@ -81,16 +69,11 @@ namespace EntityFramework.Migrations
                         .HasPrecision(18, 5)
                         .HasColumnType("decimal(18,5)");
 
-                    b.Property<int>("PublisherId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("BookId");
-
-                    b.HasIndex("PublisherId");
 
                     b.ToTable("Books");
 
@@ -100,7 +83,6 @@ namespace EntityFramework.Migrations
                             BookId = 1,
                             ISBN = "123GTRED",
                             Price = 10.99m,
-                            PublisherId = 0,
                             Title = "Spider without duty"
                         },
                         new
@@ -108,37 +90,8 @@ namespace EntityFramework.Migrations
                             BookId = 2,
                             ISBN = "12367GPRED",
                             Price = 17.99m,
-                            PublisherId = 0,
                             Title = "Fortune of Time"
                         });
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.BookDetail", b =>
-                {
-                    b.Property<int>("BookDetailId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookDetailId"));
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfChapters")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfPages")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Weight")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BookDetailId");
-
-                    b.HasIndex("BookId")
-                        .IsUnique();
-
-                    b.ToTable("BookDetails");
                 });
 
             modelBuilder.Entity("EntityFramework.Models.Category", b =>
@@ -172,6 +125,7 @@ namespace EntityFramework.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PublisherId"));
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -201,53 +155,6 @@ namespace EntityFramework.Migrations
                     b.HasKey("SubCategoryId");
 
                     b.ToTable("SubCategories");
-                });
-
-            modelBuilder.Entity("AuthorBook", b =>
-                {
-                    b.HasOne("EntityFramework.Models.Author", null)
-                        .WithMany()
-                        .HasForeignKey("AuthorsAuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EntityFramework.Models.Book", null)
-                        .WithMany()
-                        .HasForeignKey("BooksBookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.Book", b =>
-                {
-                    b.HasOne("EntityFramework.Models.Publisher", "Publisher")
-                        .WithMany("Books")
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Publisher");
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.BookDetail", b =>
-                {
-                    b.HasOne("EntityFramework.Models.Book", "Book")
-                        .WithOne("BookDetail")
-                        .HasForeignKey("EntityFramework.Models.BookDetail", "BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.Book", b =>
-                {
-                    b.Navigation("BookDetail");
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.Publisher", b =>
-                {
-                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }
