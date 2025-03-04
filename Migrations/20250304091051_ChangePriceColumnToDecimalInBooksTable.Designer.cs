@@ -3,6 +3,7 @@ using EntityFramework.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304091051_ChangePriceColumnToDecimalInBooksTable")]
+    partial class ChangePriceColumnToDecimalInBooksTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,26 +47,6 @@ namespace EntityFramework.Migrations
                     b.HasKey("BookId");
 
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.Genre", b =>
-                {
-                    b.Property<int>("GenreId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenreId"));
-
-                    b.Property<int>("Display")
-                        .HasColumnType("int");
-
-                    b.Property<string>("GenreName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("GenreId");
-
-                    b.ToTable("Genres");
                 });
 #pragma warning restore 612, 618
         }

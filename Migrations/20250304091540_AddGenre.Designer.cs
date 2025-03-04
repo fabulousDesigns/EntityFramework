@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250303143944_AddBookModel")]
-    partial class AddBookModel
+    [Migration("20250304091540_AddGenre")]
+    partial class AddGenre
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,17 +33,40 @@ namespace EntityFramework.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"));
 
                     b.Property<string>("ISBN")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("Price")
+                        .HasPrecision(18, 5)
+                        .HasColumnType("decimal(18,5)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("BookId");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("EntityFramework.Models.Genre", b =>
+                {
+                    b.Property<int>("GenreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenreId"));
+
+                    b.Property<int>("Display")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GenreName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("GenreId");
+
+                    b.ToTable("Genres");
                 });
 #pragma warning restore 612, 618
         }
