@@ -1,4 +1,6 @@
-﻿using EntityFramework.Models;
+﻿using EntityFramework.DataAccess.FluentApiConfig;
+using EntityFramework.Models;
+using EntityFramework.Models.FluentModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityFramework.DataAccess;
@@ -13,10 +15,15 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Book>().Property(x => x.Price).HasPrecision(18, 5);
-        modelBuilder.Entity<Book>().HasData(
-            new Book { BookId = 1, Title = "Spider without duty", ISBN = "123GTRED", Price = 10.99m },
-            new Book { BookId = 2, Title = "Fortune of Time", ISBN = "12367GPRED", Price = 17.99m }
-            );
+        // Fluent Author Entity
+        modelBuilder.ApplyConfiguration(new FluentAuthorConfig());
+        // Fluent Book Entity
+        modelBuilder.ApplyConfiguration(new FluentBookConfig());
+        // Fluent Book Detail Entity
+        modelBuilder.ApplyConfiguration(new FluentBookDetailConfig());
+        // Fluent Publisher Entity
+        modelBuilder.ApplyConfiguration(new FluentPublisherConfig());
+        base.OnModelCreating(modelBuilder);
     }
 
     public DbSet<Book> Books { get; set; }
@@ -25,4 +32,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<SubCategory> SubCategories { get; set; }
     public DbSet<BookDetail> BookDetails { get; set; }
+    public DbSet<FluentAuthor> FluentAuthors { get; set; }
+    public DbSet<FluentBook> FluentBooks { get; set; }
+    public DbSet<FluentBookDetail> FluentBookDetails { get; set; }
+    public DbSet<FluentPublisher> FluentPublishers { get; set; }
 }

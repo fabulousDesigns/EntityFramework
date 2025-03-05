@@ -4,6 +4,7 @@ using EntityFramework.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250305075146_AddFluentAPIModels")]
+    partial class AddFluentAPIModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,15 +185,15 @@ namespace EntityFramework.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"));
 
+                    b.Property<int?>("BookDetailId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ISBN")
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("PublisherId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -199,7 +202,7 @@ namespace EntityFramework.Migrations
 
                     b.HasKey("BookId");
 
-                    b.HasIndex("PublisherId");
+                    b.HasIndex("BookDetailId");
 
                     b.ToTable("FluentBooks");
                 });
@@ -212,9 +215,6 @@ namespace EntityFramework.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookDetailId"));
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumberOfChapters")
                         .HasColumnType("int");
 
@@ -225,9 +225,6 @@ namespace EntityFramework.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BookDetailId");
-
-                    b.HasIndex("BookId")
-                        .IsUnique();
 
                     b.ToTable("FluentBookDetails");
                 });
@@ -294,21 +291,6 @@ namespace EntityFramework.Migrations
                     b.ToTable("SubCategories");
                 });
 
-            modelBuilder.Entity("FluentAuthorFluentBook", b =>
-                {
-                    b.Property<int>("AuthorsAuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BooksBookId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuthorsAuthorId", "BooksBookId");
-
-                    b.HasIndex("BooksBookId");
-
-                    b.ToTable("FluentAuthorFluentBook");
-                });
-
             modelBuilder.Entity("AuthorBook", b =>
                 {
                     b.HasOne("EntityFramework.Models.Author", null)
@@ -348,54 +330,16 @@ namespace EntityFramework.Migrations
 
             modelBuilder.Entity("EntityFramework.Models.FluentModels.FluentBook", b =>
                 {
-                    b.HasOne("EntityFramework.Models.FluentModels.FluentPublisher", "Publisher")
-                        .WithMany("Books")
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Publisher");
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.FluentModels.FluentBookDetail", b =>
-                {
-                    b.HasOne("EntityFramework.Models.FluentModels.FluentBook", "Book")
-                        .WithOne("BookDetail")
-                        .HasForeignKey("EntityFramework.Models.FluentModels.FluentBookDetail", "BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-                });
-
-            modelBuilder.Entity("FluentAuthorFluentBook", b =>
-                {
-                    b.HasOne("EntityFramework.Models.FluentModels.FluentAuthor", null)
+                    b.HasOne("EntityFramework.Models.BookDetail", "BookDetail")
                         .WithMany()
-                        .HasForeignKey("AuthorsAuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BookDetailId");
 
-                    b.HasOne("EntityFramework.Models.FluentModels.FluentBook", null)
-                        .WithMany()
-                        .HasForeignKey("BooksBookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("BookDetail");
                 });
 
             modelBuilder.Entity("EntityFramework.Models.Book", b =>
                 {
                     b.Navigation("BookDetail");
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.FluentModels.FluentBook", b =>
-                {
-                    b.Navigation("BookDetail");
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.FluentModels.FluentPublisher", b =>
-                {
-                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("EntityFramework.Models.Publisher", b =>
