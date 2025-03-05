@@ -12,7 +12,7 @@ public class Category
 
     [Required]
     [Column("Name")]
-    [StringLength(50)]
+    [MaxLength(50)]
     public string? CategoryName { get; set; }
 
     public int DisplayOrder { get; set; }

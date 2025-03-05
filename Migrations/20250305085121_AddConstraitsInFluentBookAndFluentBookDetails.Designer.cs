@@ -4,6 +4,7 @@ using EntityFramework.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250305085121_AddConstraitsInFluentBookAndFluentBookDetails")]
+    partial class AddConstraitsInFluentBookAndFluentBookDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,17 +192,12 @@ namespace EntityFramework.Migrations
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PublisherId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("BookId");
-
-                    b.HasIndex("PublisherId");
 
                     b.ToTable("FluentBooks");
                 });
@@ -294,21 +292,6 @@ namespace EntityFramework.Migrations
                     b.ToTable("SubCategories");
                 });
 
-            modelBuilder.Entity("FluentAuthorFluentBook", b =>
-                {
-                    b.Property<int>("AuthorsAuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BooksBookId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuthorsAuthorId", "BooksBookId");
-
-                    b.HasIndex("BooksBookId");
-
-                    b.ToTable("FluentAuthorFluentBook");
-                });
-
             modelBuilder.Entity("AuthorBook", b =>
                 {
                     b.HasOne("EntityFramework.Models.Author", null)
@@ -346,17 +329,6 @@ namespace EntityFramework.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("EntityFramework.Models.FluentModels.FluentBook", b =>
-                {
-                    b.HasOne("EntityFramework.Models.FluentModels.FluentPublisher", "Publisher")
-                        .WithMany("Books")
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Publisher");
-                });
-
             modelBuilder.Entity("EntityFramework.Models.FluentModels.FluentBookDetail", b =>
                 {
                     b.HasOne("EntityFramework.Models.FluentModels.FluentBook", "Book")
@@ -368,21 +340,6 @@ namespace EntityFramework.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("FluentAuthorFluentBook", b =>
-                {
-                    b.HasOne("EntityFramework.Models.FluentModels.FluentAuthor", null)
-                        .WithMany()
-                        .HasForeignKey("AuthorsAuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EntityFramework.Models.FluentModels.FluentBook", null)
-                        .WithMany()
-                        .HasForeignKey("BooksBookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EntityFramework.Models.Book", b =>
                 {
                     b.Navigation("BookDetail");
@@ -391,11 +348,6 @@ namespace EntityFramework.Migrations
             modelBuilder.Entity("EntityFramework.Models.FluentModels.FluentBook", b =>
                 {
                     b.Navigation("BookDetail");
-                });
-
-            modelBuilder.Entity("EntityFramework.Models.FluentModels.FluentPublisher", b =>
-                {
-                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("EntityFramework.Models.Publisher", b =>

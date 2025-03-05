@@ -23,5 +23,5 @@ public class Author
     [NotMapped]
     public string FullName => $"{FirstName} {LastName}";
 
-    public List<Book> Books { get; set; }
+    public List<Book>? Books { get; set; }
 }
